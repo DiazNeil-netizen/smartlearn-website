@@ -228,3 +228,26 @@ clearTransactionsBtn.addEventListener('click', (e) => {
   });
 
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', () => {
+            // Mengganti class 'active' pada hamburger dan nav
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+
+        // Opsional: Tutup menu saat salah satu link diklik (untuk navigasi yang lebih baik)
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+            });
+        });
+    }
+    
+    // ... Tambahkan juga semua JavaScript untuk dashboard, modal, dll. di sini ...
+});
