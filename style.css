@@ -732,3 +732,33 @@ button:hover {
   font-size: 14px;
   color: #444;
 }
+
+/* Pastikan penyesuaian ini ada di dalam media query 640px */
+@media (max-width:640px) {
+    /* Wajib: Memberi jarak agar konten tidak tertutup header fixed */
+    body { 
+        padding-top: 65px; 
+    }
+    
+    /* Navigasi Mobile Override */
+    .nav { display: none; } /* Sembunyikan Navigasi default */
+    .hamburger { display: flex; } /* Tampilkan ikon Hamburger */
+    .header-actions { display: none; } /* Sembunyikan tombol Masuk/Daftar di luar menu */
+  
+    /* Layout Mobile: Mengubah grid menjadi 1 kolom */
+    .features-grid { grid-template-columns: 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    /* ... dan grid lainnya ... */
+}
+
+/* Wajib: CSS untuk menu saat aktif (di luar media query) */
+.nav.active {
+    display: flex; 
+    position: fixed;
+    top: 65px; /* Tinggi header */
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--card);
+    /* ... properti lain untuk styling menu overlay ... */
+}
