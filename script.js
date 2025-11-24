@@ -1,376 +1,329 @@
-const authBackdrop = document.getElementById('authBackdrop');
-const btnOpenLogin = document.getElementById('btnOpenLogin');
-const btnCloseAuth = document.getElementById('btnCloseAuth');
-const btnShowRegister = document.getElementById('btnShowRegister');
-const btnShowLogin = document.getElementById('btnShowLogin');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-
-const btnLogin = document.getElementById('btnLogin');
-const btnRegister = document.getElementById('btnRegister');
-
-const headerActions = document.getElementById('headerActions');
-
-const dashboardCard = document.getElementById('dashboardCard');
-
-const totalIncomeEl = document.getElementById('totalIncome');
-const totalExpenseEl = document.getElementById('totalExpense');
-const netBalanceEl = document.getElementById('netBalance');
-const transactionListEl = document.getElementById('transactionList');
-const addTransactionBtn = document.getElementById('addTransaction');
-const clearTransactionsBtn = document.getElementById('clearTransactions');
-
-let transactions = JSON.parse(localStorage.getItem('smartlearnTx')) || [];
-
-/* show/hide modal */
-btnOpenLogin.addEventListener('click', () => {
-  authBackdrop.classList.add('active');
-  showLogin();
-});
-btnCloseAuth.addEventListener('click', () => authBackdrop.classList.remove('active'));
-authBackdrop.addEventListener('click', (e) => { if (e.target === authBackdrop) authBackdrop.classList.remove('active'); });
-
-function showRegister() {
-  loginForm.style.display = 'none';
-  registerForm.style.display = 'block';
-}
-function showLogin() {
-  loginForm.style.display = 'block';
-  registerForm.style.display = 'none';
-}
-btnShowRegister.addEventListener('click', (e) => { e.preventDefault(); showRegister(); });
-btnShowLogin.addEventListener('click', (e) => { e.preventDefault(); showLogin(); });
-
-/* register */
-btnRegister.addEventListener('click', (e) => {
-  e.preventDefault();
-  const username = document.getElementById('regUsername').value.trim();
-  const password = document.getElementById('regPassword').value;
-  if (!username || !password) {
-    alert('Isi semua field untuk registrasi.');
-    return;
-  }
-  // simple check: if username exists -> fail
-  const existing = localStorage.getItem('smartlearnUser_' + username);
-  if (existing) {
-    alert('Nama pengguna sudah terdaftar. Silakan pilih nama lain.');
-    return;
-  }
-  localStorage.setItem('smartlearnUser_' + username, password);
-  alert('Registrasi berhasil. Silakan masuk.');
-  showLogin();
-});
-
-/* login */
-btnLogin.addEventListener('click', (e) => {
-  e.preventDefault();
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value;
-  if (!username || !password) {
-    alert('Isi username dan password.');
-    return;
-  }
-  const stored = localStorage.getItem('smartlearnUser_' + username);
-  if (stored && stored === password) {
-    // success
-    localStorage.setItem('smartlearnAuth', username);
-    authBackdrop.classList.remove('active');
-    renderHeaderForUser(username);
-    showDashboardForAuth();
-    loadTransactions();
-    alert('Login berhasil. Selamat datang, ' + username + '!');
-  } else {
-    alert('Username atau password salah.');
-  }
-});
-
-/* logout */
-function logoutUser() {
-  localStorage.removeItem('smartlearnAuth');
-  renderHeaderGuest();
-  hideDashboardForAuth();
-}
-
-/* header render */
-function renderHeaderForUser(username) {
-  headerActions.innerHTML = '';
-  const userBadge = document.createElement('div');
-  userBadge.className = 'user-badge';
-  userBadge.textContent = username;
-  const btnLogout = document.createElement('button');
-  btnLogout.textContent = 'Logout';
-  btnLogout.addEventListener('click', logoutUser);
-  headerActions.appendChild(userBadge);
-  headerActions.appendChild(btnLogout);
-}
-
-function renderHeaderGuest() {
-  headerActions.innerHTML = '<button id="btnOpenLogin" class="primary">Masuk / Daftar</button>';
-  // re-bind
-  document.getElementById('btnOpenLogin').addEventListener('click', () => {
-    authBackdrop.classList.add('active');
-    showLogin();
-  });
-}
-
-/* dashboard visibility */
-function showDashboardForAuth() {
-  dashboardCard.style.display = 'block';
-  // scroll to dashboard
-  location.hash = '#dashboard';
-}
-function hideDashboardForAuth() {
-  dashboardCard.style.display = 'none';
-}
-
-/* transaction logic */
-function formatRupiah(num) {
-  return Number(num).toLocaleString('id-ID');
-}
-
-function renderTotals() {
-  const income = transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
-  const expense = transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
-  totalIncomeEl.textContent = formatRupiah(income);
-  totalExpenseEl.textContent = formatRupiah(expense);
-  netBalanceEl.textContent = formatRupiah(income - expense);
-}
-
-function renderTransactions() {
-  transactionListEl.innerHTML = '';
-  transactions.slice().reverse().forEach((t, idx) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<div><strong>${t.desc}</strong><div class="small">${new Date(t.date).toLocaleString()}</div></div><div>${t.type==='income'?'+':'-'} ${formatRupiah(t.amount)}</div>`;
-    transactionListEl.appendChild(li);
-  });
-}
-
-function saveTransactions() {
-  localStorage.setItem('smartlearnTx', JSON.stringify(transactions));
-}
-
-function loadTransactions() {
-  transactions = JSON.parse(localStorage.getItem('smartlearnTx')) || [];
-  renderTotals();
-  renderTransactions();
-}
-
-/* add transaction */
-addTransactionBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  const desc = document.getElementById('calcDesc').value.trim();
-  const amount = Number(document.getElementById('calcAmount').value);
-  const type = document.getElementById('calcType').value;
-  const authUser = localStorage.getItem('smartlearnAuth');
-  if (!authUser) {
-    alert('Silakan masuk terlebih dahulu untuk mencatat transaksi.');
-    authBackdrop.classList.add('active');
-    return;
-  }
-  if (!desc || !amount || amount <= 0) {
-    alert('Isi deskripsi dan nominal transaksi yang valid.');
-    return;
-  }
-  const tx = { desc, amount, type, date: new Date().toISOString(), user: authUser };
-  transactions.push(tx);
-  saveTransactions();
-  loadTransactions();
-  document.getElementById('calcDesc').value = '';
-  document.getElementById('calcAmount').value = '';
-});
-
-/* clear transactions (for current user only) */
-clearTransactionsBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  if (!confirm('Hapus semua transaksi? Tindakan ini tidak bisa dibatalkan.')) return;
-  // remove all transactions for current user
-  const authUser = localStorage.getItem('smartlearnAuth');
-  if (!authUser) { alert('Silakan masuk dulu.'); return; }
-  transactions = transactions.filter(t => t.user !== authUser);
-  saveTransactions();
-  loadTransactions();
-});
-
-/* initial auth check */
-(function init() {
-  // hide dashboard by default for guests
-  const authUser = localStorage.getItem('smartlearnAuth');
-  if (authUser) {
-    renderHeaderForUser(authUser);
-    showDashboardForAuth();
-  } else {
-    renderHeaderGuest();
-    hideDashboardForAuth();
-  }
-  loadTransactions();
-
-  // tab behaviour for materi section
-  document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-      document.getElementById(btn.dataset.target).classList.add('active');
-    });
-  });
-
-  // video play (simple modal)
-  document.querySelectorAll('.play-video').forEach(b=>{
-    b.addEventListener('click', ()=> {
-      const src = b.dataset.video;
-      const modal = document.createElement('div');
-      modal.className = 'video-modal active';
-      modal.innerHTML = `<div class="video-box"><button id="closeVideo">×</button><iframe src="${src}" frameborder="0" allowfullscreen></iframe></div>`;
-      document.body.appendChild(modal);
-      modal.querySelector('#closeVideo').addEventListener('click', ()=> modal.remove());
-      modal.addEventListener('click', (e)=> { if (e.target === modal) modal.remove(); });
-    });
-  });
-
-})();
-
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Hamburger Menu Toggle
+    // =======================================================
+    // --- 1. DEKLARASI VARIABEL UTAMA ---
+    // =======================================================
+    
+    // Auth & Modal
+    const authBackdrop = document.getElementById('authBackdrop');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const headerActions = document.getElementById('headerActions');
+    
+    const btnCloseAuth = document.getElementById('btnCloseAuth');
+    const btnShowRegister = document.getElementById('btnShowRegister');
+    const btnShowLogin = document.getElementById('btnShowLogin');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnRegister = document.getElementById('btnRegister');
+
+    // Dashboard & Transaksi
+    const dashboardCard = document.getElementById('dashboardCard');
+    const totalIncomeEl = document.getElementById('totalIncome');
+    const totalExpenseEl = document.getElementById('totalExpense');
+    const netBalanceEl = document.getElementById('netBalance');
+    const transactionListEl = document.getElementById('transactionList');
+    const addTransactionBtn = document.getElementById('addTransaction');
+    const clearTransactionsBtn = document.getElementById('clearTransactions');
+    
+    // Navigasi & UI
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('nav');
 
-    if (hamburger && nav) {
-        hamburger.addEventListener('click', function() {
-            nav.classList.toggle('active'); // CSS akan menampilkan/menyembunyikan .nav.active
-            this.classList.toggle('is-open'); // Kelas opsional untuk animasi hamburger
+    // Data Lokal
+    let transactions = JSON.parse(localStorage.getItem('smartlearnTx')) || [];
+
+    // =======================================================
+    // --- 2. FUNGSI UTILITAS & HELPERS ---
+    // =======================================================
+
+    // Fungsi untuk menampilkan/menyembunyikan form login/register
+    function showRegister() {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+    }
+    function showLogin() {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+    }
+
+    // Format Rupiah
+    function formatRupiah(num) {
+        return Number(num).toLocaleString('id-ID');
+    }
+
+    // Header Render untuk pengguna yang sudah login
+    function renderHeaderForUser(username) {
+        headerActions.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px; font-weight:600;">
+                <i class="fas fa-user-circle" style="font-size:20px; color:var(--primary)"></i> 
+                Hai, ${username}!
+                <button id="btnLogout" class="primary" style="background:var(--danger)">Keluar</button>
+            </div>
+        `;
+        // Re-bind listener untuk tombol Logout
+        document.getElementById('btnLogout').addEventListener('click', logoutUser);
+    }
+
+    // Header Render untuk tamu/guest
+    function renderHeaderGuest() {
+        headerActions.innerHTML = '<button id="btnOpenLogin" class="primary">Masuk / Daftar</button>';
+        // Re-bind listener untuk tombol Masuk/Daftar
+        document.getElementById('btnOpenLogin').addEventListener('click', () => {
+            authBackdrop.classList.add('active');
+            showLogin();
         });
     }
 
-    // 2. Login/Register Modal Management
-    const authBackdrop = document.getElementById('authBackdrop');
-    const btnOpenLogin = document.getElementById('btnOpenLogin');
-    const btnCloseAuth = document.getElementById('btnCloseAuth');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const btnShowRegister = document.getElementById('btnShowRegister');
-    const btnShowLogin = document.getElementById('btnShowLogin');
+    // Dashboard Visibility
+    function showDashboardForAuth() {
+        dashboardCard.style.display = 'block';
+        location.hash = '#dashboard';
+    }
+    function hideDashboardForAuth() {
+        dashboardCard.style.display = 'none';
+    }
 
-    if (btnOpenLogin && authBackdrop) {
-        btnOpenLogin.addEventListener('click', function() {
-            authBackdrop.style.display = 'flex';
-            authBackdrop.setAttribute('aria-hidden', 'false');
+    // =======================================================
+    // --- 3. TRANSAKSI & DASHBOARD LOGIC ---
+    // =======================================================
+
+    function renderTotals() {
+        const authUser = localStorage.getItem('smartlearnAuth');
+        if (!authUser) return; // Jangan render jika belum login
+        
+        // Filter transaksi hanya untuk pengguna yang sedang login
+        const userTransactions = transactions.filter(t => t.user === authUser);
+
+        const income = userTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+        const expense = userTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+
+        totalIncomeEl.textContent = formatRupiah(income);
+        totalExpenseEl.textContent = formatRupiah(expense);
+        netBalanceEl.textContent = formatRupiah(income - expense);
+    }
+
+    function renderTransactions() {
+        const authUser = localStorage.getItem('smartlearnAuth');
+        if (!authUser) return;
+        
+        const userTransactions = transactions.filter(t => t.user === authUser);
+
+        transactionListEl.innerHTML = '';
+        userTransactions.slice().reverse().forEach((t) => {
+            const li = document.createElement('li');
+            // Menambahkan kelas untuk membedakan Pemasukan/Pengeluaran (untuk styling CSS)
+            li.className = t.type === 'income' ? 'income-item' : 'expense-item'; 
+            li.innerHTML = `
+                <div>
+                    <strong>${t.desc}</strong>
+                    <div class="small">${new Date(t.date).toLocaleString()}</div>
+                </div>
+                <div>
+                    ${t.type === 'income' ? '+' : '-'} ${formatRupiah(t.amount)}
+                </div>
+            `;
+            transactionListEl.appendChild(li);
         });
     }
 
-    if (btnCloseAuth && authBackdrop) {
-        btnCloseAuth.addEventListener('click', function() {
-            authBackdrop.style.display = 'none';
-            authBackdrop.setAttribute('aria-hidden', 'true');
-        });
+    function saveTransactions() {
+        localStorage.setItem('smartlearnTx', JSON.stringify(transactions));
     }
 
-    if (btnShowRegister && registerForm && loginForm) {
-        btnShowRegister.addEventListener('click', function() {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-        });
+    function loadTransactions() {
+        // Data global transactions sudah dimuat di awal. Cukup render yang relevan.
+        renderTotals();
+        renderTransactions();
     }
+    
+    // Event Handler: Tambah Transaksi
+    addTransactionBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const desc = document.getElementById('calcDesc').value.trim();
+        const amount = Number(document.getElementById('calcAmount').value);
+        const type = document.getElementById('calcType').value;
+        const authUser = localStorage.getItem('smartlearnAuth');
 
-    if (btnShowLogin && registerForm && loginForm) {
-        btnShowLogin.addEventListener('click', function() {
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-        });
-    }
+        if (!authUser) {
+            alert('Silakan masuk terlebih dahulu untuk mencatat transaksi.');
+            authBackdrop.classList.add('active');
+            showLogin();
+            return;
+        }
+        if (!desc || !amount || amount <= 0) {
+            alert('Isi deskripsi dan nominal transaksi yang valid.');
+            return;
+        }
+        
+        const tx = { desc, amount, type, date: new Date().toISOString(), user: authUser };
+        transactions.push(tx);
+        saveTransactions();
+        loadTransactions();
+        
+        // Clear input fields
+        document.getElementById('calcDesc').value = '';
+        document.getElementById('calcAmount').value = '';
+    });
 
-    // 3. Tab Management (Materi)
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    // Event Handler: Hapus Transaksi
+    clearTransactionsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const authUser = localStorage.getItem('smartlearnAuth');
+        if (!authUser) { alert('Silakan masuk dulu.'); return; }
+        
+        if (!confirm('Hapus SEMUA transaksi Anda? Tindakan ini tidak bisa dibatalkan.')) return;
+        
+        // Filter: Hanya simpan transaksi yang BUKAN milik pengguna saat ini
+        transactions = transactions.filter(t => t.user !== authUser);
+        saveTransactions();
+        loadTransactions();
+    });
 
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Hapus 'active' dari semua tombol dan konten
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-            content.style.display = 'none';
+    // =======================================================
+    // --- 4. AUTHENTICATION LOGIC (LOCAL STORAGE) ---
+    // =======================================================
 
-            // Tambahkan 'active' ke tombol yang diklik
-            this.classList.add('active');
+    // Event Handler: Registrasi
+    btnRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('regUsername').value.trim();
+        const password = document.getElementById('regPassword').value;
+        
+        if (!username || !password) {
+            alert('Isi semua field untuk registrasi.');
+            return;
+        }
+        
+        const existing = localStorage.getItem('smartlearnUser_' + username);
+        if (existing) {
+            alert('Nama pengguna sudah terdaftar. Silakan pilih nama lain.');
+            return;
+        }
+        
+        // Simpan username dan password (sebagai teks biasa, karena ini DEMO)
+        localStorage.setItem('smartlearnUser_' + username, password);
+        alert('Registrasi berhasil. Silakan masuk.');
+        
+        // Bersihkan input dan tampilkan login
+        document.getElementById('regUsername').value = '';
+        document.getElementById('regPassword').value = '';
+        showLogin();
+    });
 
-            // Tampilkan konten yang sesuai
-            const targetId = this.getAttribute('data-target');
-            const targetContent = document.getElementById(targetId);
-            if (targetContent) {
-                 targetContent.classList.add('active');
-                 targetContent.style.display = 'block';
-            }
-        });
-        // Inisialisasi: Pastikan hanya konten pertama yang terlihat saat dimuat
-        if (!button.classList.contains('active')) {
-            const targetId = button.getAttribute('data-target');
-            const targetContent = document.getElementById(targetId);
-            if (targetContent) {
-                targetContent.style.display = 'none';
-            }
+    // Event Handler: Login
+    btnLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+            alert('Isi username dan password.');
+            return;
+        }
+        
+        const stored = localStorage.getItem('smartlearnUser_' + username);
+        
+        if (stored && stored === password) {
+            // Success
+            localStorage.setItem('smartlearnAuth', username); // Simpan status auth
+            authBackdrop.classList.remove('active');
+            
+            // Render UI
+            renderHeaderForUser(username);
+            showDashboardForAuth();
+            loadTransactions();
+            
+            // Bersihkan input
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+
+            alert('Login berhasil. Selamat datang, ' + username + '!');
+        } else {
+            alert('Username atau password salah.');
         }
     });
-});
 
-/* Tambahkan juga fungsi untuk Kalkulator Transaksi jika diperlukan */
+    // Event Handler: Logout
+    function logoutUser() {
+        localStorage.removeItem('smartlearnAuth');
+        renderHeaderGuest();
+        hideDashboardForAuth();
+        // Hapus juga data transaksi lokal saat logout (opsional, tapi disarankan untuk demo)
+        transactions = []; 
+        saveTransactions();
+        alert('Anda telah berhasil keluar.');
+        window.location.reload(); // Muat ulang halaman untuk reset tampilan
+    }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // ... (Kode untuk Hamburger Menu, Modal Management, dan Tab Management sebelumnya) ...
 
-    const authBackdrop = document.getElementById('authBackdrop');
-    const loginForm = document.getElementById('loginForm');
-    // ... (deklarasi variabel modal lainnya) ...
+    // =======================================================
+    // --- 5. INITIALIZATION (INIT) & EVENT LISTENERS UI ---
+    // =======================================================
     
-    // =======================================================
-    // --- 🔑 SIMULASI FUNGSI LOGIN UNTUK PRESENTASI ---
-    // =======================================================
-    const btnLogin = document.getElementById('btnLogin');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const headerActions = document.getElementById('headerActions'); // Untuk mengganti tombol
+    // --- A. Modal & Form Toggles ---
+    document.querySelector('.header-actions button').addEventListener('click', () => { // btnOpenLogin
+        authBackdrop.classList.add('active');
+        showLogin();
+    });
+    btnCloseAuth.addEventListener('click', () => authBackdrop.classList.remove('active'));
+    authBackdrop.addEventListener('click', (e) => { 
+        if (e.target === authBackdrop) authBackdrop.classList.remove('active'); 
+    });
+    btnShowRegister.addEventListener('click', (e) => { e.preventDefault(); showRegister(); });
+    btnShowLogin.addEventListener('click', (e) => { e.preventDefault(); showLogin(); });
 
-    if (btnLogin && usernameInput && passwordInput && headerActions) {
-        btnLogin.addEventListener('click', function() {
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-
-            // Atur Kredensial Demo Anda di sini
-            const DEMO_USERNAME = "demo";
-            const DEMO_PASSWORD = "123"; 
-
-            // Cek Kredensial
-            if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-                
-                // 1. Tampilkan notifikasi
-                alert("✅ Login Berhasil! Selamat datang, " + username + ".");
-
-                // 2. Tutup Modal
-                authBackdrop.style.display = 'none';
-
-                // 3. Ganti Tombol "Masuk / Daftar" dengan Status Pengguna
-                headerActions.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px; font-weight:600;">
-                        <i class="fas fa-user-circle" style="font-size:20px; color:var(--primary)"></i> 
-                        Hai, ${username}!
-                        <button id="btnLogout" class="primary" style="background:var(--danger)">Keluar</button>
-                    </div>
-                `;
-                
-                // 4. Tambahkan Fungsionalitas Logout (Opsional)
-                document.getElementById('btnLogout').addEventListener('click', function() {
-                    alert("Anda telah berhasil keluar.");
-                    // Kembalikan tombol ke kondisi awal
-                    headerActions.innerHTML = '<button id="btnOpenLogin" class="primary">Masuk / Daftar</button>';
-                    // Tambahkan kembali listener untuk btnOpenLogin jika tombolnya dibuat ulang
-                    // (Ini memerlukan penyesuaian pada struktur DOM)
-                    window.location.reload(); // Cara termudah untuk me-reset tampilan demo
-                });
-
-            } else {
-                // Login Gagal
-                alert("❌ Login Gagal. Silakan coba Username: demo, Password: 123.");
-            }
+    // --- B. Hamburger Menu ---
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            // Jika Anda memiliki CSS untuk animasi, tambahkan/hapus kelas di sini
         });
     }
 
-    // ... (Pastikan kode penanganan modal btnOpenLogin dll. ada dan berfungsi) ...
+    // --- C. Materi Tabs ---
+    document.querySelectorAll('.tab-nav button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(btn.dataset.target).style.display = 'block';
+        });
+    });
+
+    // Inisialisasi tampilan tab pertama
+    const initialTab = document.querySelector('.tab-nav button.active');
+    if(initialTab) {
+        document.getElementById(initialTab.dataset.target).style.display = 'block';
+    }
+
+
+    // --- D. Video Player (Sederhana) ---
+    document.querySelectorAll('.play-video').forEach(b => {
+        b.addEventListener('click', () => {
+            const src = b.dataset.video;
+            const modal = document.createElement('div');
+            modal.className = 'video-modal';
+            modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:9999;';
+            modal.innerHTML = `
+                <div style="position:relative; width:90%; max-width:800px; aspect-ratio:16/9;">
+                    <button id="closeVideo" style="position:absolute; top:-30px; right:0; background:white; border:none; color:black; font-size:24px; cursor:pointer; padding:5px 10px; border-radius:50%;">×</button>
+                    <iframe src="${src}" frameborder="0" allowfullscreen style="width:100%; height:100%;"></iframe>
+                </div>`;
+            document.body.appendChild(modal);
+            modal.querySelector('#closeVideo').addEventListener('click', () => modal.remove());
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        });
+    });
+
+
+    // --- E. Initial Auth Check ---
+    const authUser = localStorage.getItem('smartlearnAuth');
+    if (authUser) {
+        renderHeaderForUser(authUser);
+        showDashboardForAuth();
+    } else {
+        renderHeaderGuest();
+        hideDashboardForAuth();
+    }
+    loadTransactions(); // Memuat data awal
 });
