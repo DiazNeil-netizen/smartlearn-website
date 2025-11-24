@@ -228,3 +228,87 @@ clearTransactionsBtn.addEventListener('click', (e) => {
   });
 
 })();
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Hamburger Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', function() {
+            nav.classList.toggle('active'); // CSS akan menampilkan/menyembunyikan .nav.active
+            this.classList.toggle('is-open'); // Kelas opsional untuk animasi hamburger
+        });
+    }
+
+    // 2. Login/Register Modal Management
+    const authBackdrop = document.getElementById('authBackdrop');
+    const btnOpenLogin = document.getElementById('btnOpenLogin');
+    const btnCloseAuth = document.getElementById('btnCloseAuth');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const btnShowRegister = document.getElementById('btnShowRegister');
+    const btnShowLogin = document.getElementById('btnShowLogin');
+
+    if (btnOpenLogin && authBackdrop) {
+        btnOpenLogin.addEventListener('click', function() {
+            authBackdrop.style.display = 'flex';
+            authBackdrop.setAttribute('aria-hidden', 'false');
+        });
+    }
+
+    if (btnCloseAuth && authBackdrop) {
+        btnCloseAuth.addEventListener('click', function() {
+            authBackdrop.style.display = 'none';
+            authBackdrop.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    if (btnShowRegister && registerForm && loginForm) {
+        btnShowRegister.addEventListener('click', function() {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+    }
+
+    if (btnShowLogin && registerForm && loginForm) {
+        btnShowLogin.addEventListener('click', function() {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        });
+    }
+
+    // 3. Tab Management (Materi)
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Hapus 'active' dari semua tombol dan konten
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            content.style.display = 'none';
+
+            // Tambahkan 'active' ke tombol yang diklik
+            this.classList.add('active');
+
+            // Tampilkan konten yang sesuai
+            const targetId = this.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                 targetContent.classList.add('active');
+                 targetContent.style.display = 'block';
+            }
+        });
+        // Inisialisasi: Pastikan hanya konten pertama yang terlihat saat dimuat
+        if (!button.classList.contains('active')) {
+            const targetId = button.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.style.display = 'none';
+            }
+        }
+    });
+});
+
+/* Tambahkan juga fungsi untuk Kalkulator Transaksi jika diperlukan */
