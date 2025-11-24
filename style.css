@@ -732,3 +732,151 @@ button:hover {
   font-size: 14px;
   color: #444;
 }
+
+/* ========================================================= */
+/* --- RESPONSIF - MOBILE ADJUSTMENTS (Max-Width 768px) --- */
+/* ========================================================= */
+
+@media (max-width: 768px) {
+    .container {
+        /* Tambahkan padding horizontal agar tidak menempel ke tepi layar */
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /* --- HEADER & NAVIGATION --- */
+    .header .inner {
+        /* Pastikan logo dan elemen header lain tetap rapi */
+        padding: 10px 0;
+    }
+
+    .nav {
+        /* Sembunyikan navigasi default pada mobile, akan ditampilkan via hamburger */
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff; /* Sesuaikan dengan background header */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        z-index: 1000;
+        padding: 10px 20px;
+    }
+
+    .nav.active {
+        display: flex;
+    }
+
+    .nav a {
+        /* Buat item menu memenuhi lebar dan lebih mudah diklik */
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .hamburger {
+        /* Tampilkan tombol hamburger */
+        display: flex;
+    }
+
+    .header-actions {
+        /* Sembunyikan tombol login/daftar jika ingin disatukan ke menu nav (opsional) */
+        /* Namun, untuk kemudahan: biarkan tetap ada atau atur letaknya */
+        order: 3; /* Atur urutan jika perlu */
+    }
+
+    /* --- HERO SECTION --- */
+    .hero h1 {
+        /* Kurangi ukuran font untuk layar kecil */
+        font-size: 28px;
+        line-height: 1.3;
+        text-align: center;
+    }
+
+    .hero p {
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .cta {
+        /* Pastikan CTA besar ada di tengah */
+        display: block;
+        width: fit-content;
+        margin: 20px auto 0 auto;
+        padding: 15px 30px;
+    }
+
+    /* --- FEATURES GRID / DASHBOARD --- */
+    .features-grid,
+    .dashboard,
+    /* Flexbox yang perlu diubah jadi tumpukan vertikal */
+    #tentang > .card > div:nth-child(3), /* Container Fitur di Tentang */
+    #kontak > .card > div:nth-child(3) { /* Container Form & WA di Kontak */
+        /* Ubah tata letak horizontal (grid/flex) menjadi tumpukan vertikal */
+        flex-direction: column;
+        gap: 30px; /* Tambahkan jarak antar item */
+    }
+
+    .dashboard-card {
+        /* Biarkan kartu dashboard memenuhi lebar penuh */
+        width: 100%;
+    }
+
+    /* --- CALCULATOR INPUTS --- */
+    .calc-input {
+        /* Ubah input kalkulator menjadi tumpukan vertikal jika perlu */
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .calc-input > * {
+        width: 100%;
+        flex: none;
+    }
+
+    /* --- MATERI TABS CONTENT (Video Grid) --- */
+    #video > div {
+        /* Ubah tata letak video dari 3 kolom menjadi 1 kolom */
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .video-thumb img {
+        /* Pastikan gambar thumbnail memenuhi lebar */
+        width: 100%;
+    }
+
+    /* --- TESTIMONIALS --- */
+    #testimoni > div > div {
+        /* Untuk item testimonial, ubah dari horizontal menjadi vertikal */
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    #testimoni img {
+        /* Atur ulang gambar agar lebih sesuai di layout vertikal */
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        margin-bottom: 10px;
+    }
+
+    /* --- MODAL (Login/Register) --- */
+    .modal {
+        /* Atur lebar modal agar tidak terlalu besar di mobile */
+        width: 90%;
+        margin: 5% auto;
+    }
+
+    .form-row-modal,
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row-modal input,
+    .form-row input,
+    .form-row textarea {
+        width: 100%;
+    }
+}
