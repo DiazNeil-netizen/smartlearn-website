@@ -880,3 +880,46 @@ button:hover {
         width: 100%;
     }
 }
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.video-modal .video-box {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
+}
+.video-modal .video-box iframe {
+    width: 100%;
+    height: 100%;
+}
+.video-modal .video-box #closeVideo {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background: white;
+    border: none;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+    z-index: 10000;
+}
+
+/* Optional: styling for transaction list */
+#transactionList li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
