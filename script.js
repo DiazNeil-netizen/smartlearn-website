@@ -312,3 +312,29 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /* Tambahkan juga fungsi untuk Kalkulator Transaksi jika diperlukan */
+// ... (Lanjutkan dari kode JS sebelumnya)
+
+    const btnLogin = document.getElementById('btnLogin');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    if (btnLogin) {
+        btnLogin.addEventListener('click', function() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            // --- SIMULASI LOGIKA OTENTIKASI (Harus diganti dengan Panggilan API/Server) ---
+
+            if (username === "admin" && password === "12345") {
+                // Simulasi Sukses Login
+                alert("Login Berhasil! Selamat datang, " + username);
+                authBackdrop.style.display = 'none'; // Tutup modal
+                // Di sini Anda biasanya akan mengarahkan pengguna ke dashboard atau mengubah tampilan header
+            } else {
+                // Simulasi Gagal Login
+                alert("Login Gagal. Nama pengguna atau password salah.");
+            }
+        });
+    }
+
+// ...
