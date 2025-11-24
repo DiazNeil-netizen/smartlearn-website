@@ -312,29 +312,65 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /* Tambahkan juga fungsi untuk Kalkulator Transaksi jika diperlukan */
-// ... (Lanjutkan dari kode JS sebelumnya)
 
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (Kode untuk Hamburger Menu, Modal Management, dan Tab Management sebelumnya) ...
+
+    const authBackdrop = document.getElementById('authBackdrop');
+    const loginForm = document.getElementById('loginForm');
+    // ... (deklarasi variabel modal lainnya) ...
+    
+    // =======================================================
+    // --- 🔑 SIMULASI FUNGSI LOGIN UNTUK PRESENTASI ---
+    // =======================================================
     const btnLogin = document.getElementById('btnLogin');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+    const headerActions = document.getElementById('headerActions'); // Untuk mengganti tombol
 
-    if (btnLogin) {
+    if (btnLogin && usernameInput && passwordInput && headerActions) {
         btnLogin.addEventListener('click', function() {
-            const username = usernameInput.value;
-            const password = passwordInput.value;
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
 
-            // --- SIMULASI LOGIKA OTENTIKASI (Harus diganti dengan Panggilan API/Server) ---
+            // Atur Kredensial Demo Anda di sini
+            const DEMO_USERNAME = "demo";
+            const DEMO_PASSWORD = "123"; 
 
-            if (username === "admin" && password === "12345") {
-                // Simulasi Sukses Login
-                alert("Login Berhasil! Selamat datang, " + username);
-                authBackdrop.style.display = 'none'; // Tutup modal
-                // Di sini Anda biasanya akan mengarahkan pengguna ke dashboard atau mengubah tampilan header
+            // Cek Kredensial
+            if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+                
+                // 1. Tampilkan notifikasi
+                alert("✅ Login Berhasil! Selamat datang, " + username + ".");
+
+                // 2. Tutup Modal
+                authBackdrop.style.display = 'none';
+
+                // 3. Ganti Tombol "Masuk / Daftar" dengan Status Pengguna
+                headerActions.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px; font-weight:600;">
+                        <i class="fas fa-user-circle" style="font-size:20px; color:var(--primary)"></i> 
+                        Hai, ${username}!
+                        <button id="btnLogout" class="primary" style="background:var(--danger)">Keluar</button>
+                    </div>
+                `;
+                
+                // 4. Tambahkan Fungsionalitas Logout (Opsional)
+                document.getElementById('btnLogout').addEventListener('click', function() {
+                    alert("Anda telah berhasil keluar.");
+                    // Kembalikan tombol ke kondisi awal
+                    headerActions.innerHTML = '<button id="btnOpenLogin" class="primary">Masuk / Daftar</button>';
+                    // Tambahkan kembali listener untuk btnOpenLogin jika tombolnya dibuat ulang
+                    // (Ini memerlukan penyesuaian pada struktur DOM)
+                    window.location.reload(); // Cara termudah untuk me-reset tampilan demo
+                });
+
             } else {
-                // Simulasi Gagal Login
-                alert("Login Gagal. Nama pengguna atau password salah.");
+                // Login Gagal
+                alert("❌ Login Gagal. Silakan coba Username: demo, Password: 123.");
             }
         });
     }
 
-// ...
+    // ... (Pastikan kode penanganan modal btnOpenLogin dll. ada dan berfungsi) ...
+});
