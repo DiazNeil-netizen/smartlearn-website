@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SmartLearn — Solusi Keuangan UMKM Modern</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+    <body>
+<header class="header" id="header">
+  <div class="container inner">
+    <a href="#beranda" class="brand"><i class="fas fa-rocket"></i> SmartLearn</a>
+    <nav class="nav" id="nav">
+      <a href="#beranda" class="active">Beranda</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#materi">Materi</a>
+      <a href="#testimoni">Testimoni</a>
+      <a href="#tentang">Tentang</a>
+      <a class="cta-sm" id="waContact" href="#kontak">Kontak</a>
+    </nav>
+
+    <!-- header right actions: Login/Register or User -->
+    <div class="header-actions right-actions" id="headerActions">
+      <button id="btnOpenLogin" class="primary">Masuk / Daftar</button>
+    </div>
+
+    <div class="hamburger" id="hamburger" aria-label="Buka menu" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN / REGISTER MODAL -->
+<div class="modal-backdrop" id="authBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div id="authForms">
+      <div id="loginForm">
+        <h3 id="authTitle">Masuk ke SmartLearn</h3>
+        <div class="form-row-modal">
+          <input type="text" id="username" placeholder="Nama Pengguna" />
+          <input type="password" id="password" placeholder="Password" />
+          <div style="display:flex;gap:10px">
+            <button id="btnLogin">Masuk</button>
+            <button id="btnShowRegister" style="background:transparent;border:1px solid var(--border)">Daftar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="registerForm" style="display:none">
+        <h3>Daftar Akun Baru</h3>
+        <div class="form-row-modal">
+          <input type="text" id="regUsername" placeholder="Nama Pengguna" />
+          <input type="password" id="regPassword" placeholder="Password" />
+          <div style="display:flex;gap:10px">
+            <button id="btnRegister">Daftar</button>
+            <button id="btnShowLogin" style="background:transparent;border:1px solid var(--border)">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:right;margin-top:12px">
+      <button id="btnCloseAuth" style="background:transparent;border:1px solid var(--border)">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<section class="hero" id="beranda">
+  <div class="container">
+    <h1>Revolusi Pencatatan Keuangan UMKM — Cukup WhatsApp!</h1>
+    <p>Catat transaksi dalam sekejap. Dapatkan laporan cerdas otomatis mingguan untuk bisnis Anda berkembang.</p>
+    <a class="cta" id="ctaStart" href="#kontak">Mulai Gratis Sekarang <i class="fas fa-rocket"></i></a>
+  </div>
+</section>
+
+<main class="container" style="padding-top:40px">
+  <section id="fitur">
+    <div class="card">
+      <div class="section-title"><h2><i class="fas fa-lightbulb"></i> Kenapa Pilih SmartLearn?</h2></div>
+      <div class="features-grid">
+        <div class="feature">
+          <h3>Dirancang untuk UMKM</h3>
+          <p class="small">Antarmuka minimal, langkah pencatatan singkat, fokus pada efisiensi kas harian.</p>
+        </div>
+        <div class="feature">
+          <h3>Integrasi WhatsApp</h3>
+          <p class="small">Input lewat WhatsApp — tidak perlu aplikasi baru. Ideal untuk pemilik yang sibuk.</p>
+        </div>
+        <div class="feature">
+          <h3>Laporan Mingguan Otomatis</h3>
+          <p class="small">Ringkasan pemasukan, pengeluaran, dan rekomendasi sederhana tiap minggu.</p>
+        </div>
+        <div class="feature">
+          <h3>Ringan & Aman</h3>
+          <p class="small">Dirancang untuk perangkat tua, enkripsi sederhana untuk privasi data.</p>
+        </div>
+        <div class="feature">
+          <h3>Materi Pembelajaran Gratis</h3>
+          <p class="small">Video & PDF singkat yang ajarkan pencatatan dan pengelolaan kas.</p>
+        </div>
+        <div class="feature">
+          <h3>Familiaritas & Kepercayaan</h3>
+          <p class="small">Menggunakan WhatsApp yang sudah familiar mengatasi kecemasan pedagang terhadap aplikasi finansial yang terlalu rumit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboard">
+    <div class="card" id="dashboardCard">
+      <div class="section-title"><h2><i class="fas fa-chart-line"></i> Dashboard Sederhana</h2></div>
+      <p class="small">Pantau transaksi Anda secara real-time. Data disimpan di browser Anda.</p>
+      <div class="dashboard">
+        <div class="dashboard-card">
+          <h3>Total Pemasukan</h3>
+          <div class="kv"><span class="num" id="totalIncome">0</span> IDR</div>
+        </div>
+        <div class="dashboard-card">
+          <h3>Total Pengeluaran</h3>
+          <div class="kv"><span class="num" id="totalExpense">0</span> IDR</div>
+        </div>
+        <div class="dashboard-card">
+          <h3>Saldo Bersih</h3>
+          <div class="kv"><span class="num" id="netBalance">0</span> IDR</div>
+        </div>
+      </div>
+      <div class="calculator">
+        <h3>Kalkulator Transaksi Sederhana</h3>
+        <div class="calc-input">
+          <input type="text" id="calcDesc" placeholder="Deskripsi (e.g., Jualan nasi)" required />
+          <input type="number" id="calcAmount" placeholder="Nominal (IDR)" required min="0" />
+          <select id="calcType" required>
+            <option value="income">Pemasukan</option>
+            <option value="expense">Pengeluaran</option>
+          </select>
+          <button id="addTransaction">Tambah Transaksi</button>
+        </div>
+        <ul id="transactionList"></ul>
+        <button id="clearTransactions" style="margin-top:10px;background:#ff6b6b">Hapus Semua Transaksi</button>
+      </div>
+    </div>
+  </section>
+
+ <section id="materi">
+  <div class="card">
+    <div class="section-title"><h2><i class="fas fa-book-open"></i> Materi Pembelajaran Gratis</h2></div>
+
+    <div class="tab-nav" role="tablist" aria-label="Pilihan materi">
+      <button class="tab-btn active" data-target="video">Video Singkat</button>
+      <button class="tab-btn" data-target="pdf">PDF & Cheat-sheet</button>
+      <button class="tab-btn" data-target="live">Sesi Live Gratis</button>
+    </div>
+
+    <div id="video" class="tab-content active">
+      <p class="small">Kumpulan video singkat (&lt; 8 menit) yang menjelaskan pencatatan via WhatsApp, dasar pembukuan kas, dan cara membaca laporan singkat.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+        <div style="flex:1;min-width:260px">
+          <div class="video-thumb"> 
+            <img src="https://img.youtube.com/vi/zp9_VoSlQd0/maxresdefault.jpg" alt="Thumbnail Video 1" />
+            <button class="play-video" data-video="https://www.youtube.com/embed/zp9_VoSlQd0?si=ptuwOKjMDBDexybM">Putar Video</button>
+          </div>
+          <h3>Uang Bisnis Rapih dalam 5 Langkah</h3>
+          <p class="small">Panduan 5 langkah praktis untuk merapikan keuangan usaha sejak awal.</p>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/Gpxd-zSthGg/maxresdefault.jpg" alt="Thumbnail Video 2" />
+            <button class="play-video" data-video="https://www.youtube.com/embed/Gpxd-zSthGg?si=fJ19CCpvA7JHmnM0">Putar Video</button>
+          </div>
+          <h3>Atur Duit Bisnis (Mulai dari Sini)</h3>
+          <p class="small">Kunci awal mengelola uang usaha agar tidak cepat habis dan cash flow lancar.</p>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/rHvTj2shiuw/maxresdefault.jpg" alt="Thumbnail Video 3" />
+            <button class="play-video" data-video="https://www.youtube.com/embed/rHvTj2shiuw?si=fZgATjPv5CKDWwlp">Putar Video</button>
+          </div>
+          <h3>4 Cara Menghitung Gaji Owner</h3>
+          <p class="small">Cara mudah dan benar menentukan gaji pemilik UMKM agar bisnis tetap sehat.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="pdf" class="tab-content">
+      <p class="small">Unduh cheat-sheet dan contoh format CSV yang bisa diimpor ke Excel.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+        <a
+          href="#"
+          download
+          style="background:var(--gradient);color:white;padding:14px 20px;border-radius:12px;text-decoration:none;box-shadow:var(--shadow)">
+          Download Cheat-Sheet
+        </a>
+
+        <a
+          href="#"
+          download
+          style="background:var(--primary);color:white;padding:14px 20px;border-radius:12px;text-decoration:none;box-shadow:var(--shadow)">
+          Download Format CSV
+        </a>
+      </div>
+    </div>
+
+    <div id="live" class="tab-content">
+      <p class="small">Sesi live gratis via Zoom setiap minggu untuk UMKM pemula yang ingin belajar pembukuan dengan cepat.</p>
+      <ul style="margin-top:16px;line-height:1.8">
+        <li>📅 Setiap Hari Sabtu, 09.00–10.00 WIB</li>
+        <li>🎤 Mentor: Praktisi UMKM berpengalaman</li>
+        <li>🎧 Rekaman bisa diunduh setelah sesi selesai</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="testimoni" style="margin-top:60px; padding:40px 0;">
+  <h2 style="color:#333; font-size:32px; text-align:center; margin-bottom:35px; font-weight:700;">
+    Apa Kata Pengguna
+  </h2>
+
+  <div style="max-width:1000px; margin:0 auto; display:flex; flex-direction:column; gap:40px;">
+
+    <!-- ITEM 1 -->
+    <div style="
+      display:flex;
+      gap:25px;
+      background:#ffffff;
+      border:1px solid #e6e6e6;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+      align-items:center;
+    ">
+      <img 
+        src="/image/WhatsApp Image 2025-11-23 at 10.56.30_e1d8ef74.jpg"
+        style="width:200px; height:130px; object-fit:cover; border-radius:14px;"
+      >
+      <div>
+        <h3 style="color:#333; font-size:20px; margin-bottom:5px; font-weight:600;">Rafi Saputra</h3>
+        <p style="color:#555; line-height:1.6; font-size:16px;">
+          “Materi SmartLearn itu jelas dan langsung bisa dipakai. Penjelasan sederhana tapi tetap mendalam.”
+        </p>
+      </div>
+    </div>
+
+    <!-- ITEM 2 -->
+    <div style="
+      display:flex;
+      gap:25px;
+      background:#ffffff;
+      border:1px solid #e6e6e6;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+      align-items:center;
+    ">
+      <img 
+        src="/image/WhatsApp Image 2025-11-23 at 12.08.17_f3173540.jpg"
+
+        style="width:200px; height:130px; object-fit:cover; border-radius:14px;"
+      >
+      <div>
+        <h3 style="color:#333; font-size:20px; margin-bottom:5px; font-weight:600;">Dodi dintil</h3>
+        <p style="color:#555; line-height:1.6; font-size:16px;">
+          “Cara penyajian materinya modern dan enak diikuti. Tidak terasa seperti belajar rumit.”
+        </p>
+      </div>
+    </div>
+
+    <!-- ITEM 3 -->
+    <div style="
+      display:flex;
+      gap:25px;
+      background:#ffffff;
+      border:1px solid #e6e6e6;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+      align-items:center;
+    ">
+      <img 
+        src="/image/WhatsApp Image 2025-11-23 at 10.56.33_0307d41b.jpg" alt="Foto UMKM"
+        style="width:200px; height:130px; object-fit:cover; border-radius:14px;"
+      >
+      <div>
+        <h3 style="color:#333; font-size:20px; margin-bottom:5px; font-weight:600;">Bima Herlambang</h3>
+        <p style="color:#555; line-height:1.6; font-size:16px;">
+          “Layout horizontal bikin testimoni ini terasa profesional dan nyaman dilihat.”
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+          
+<!-- ===================== TENTANG ===================== -->
+<section id="tentang">
+  <div class="card">
+    <div class="section-title">
+      <h2><i class="fas fa-info-circle"></i> Tentang SmartLearn</h2>
+    </div>
+
+    <p class="small" style="margin-bottom:20px">
+      SmartLearn adalah platform sederhana yang membantu UMKM mencatat transaksi hanya lewat WhatsApp.
+      Tanpa aplikasi rumit, tanpa harus paham akuntansi. Fokus kami cuma satu: membuat pemilik usaha
+      kecil bisa mengatur uang lebih rapi tanpa membuang waktu.
+    </p>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px">
+      <div class="feature" style="flex:1;min-width:260px">
+        <h3>Misi Kami</h3>
+        <p class="small">Membantu UMKM mengelola kas harian dengan cara paling cepat, mudah, dan bisa dipakai siapa pun.</p>
+      </div>
+
+      <div class="feature" style="flex:1;min-width:260px">
+        <h3>Kenapa Dibuat?</h3>
+        <p class="small">Karena 80% UMKM masih mencatat manual dan sering kehilangan data penting.</p>
+      </div>
+
+      <div class="feature" style="flex:1;min-width:260px">
+        <h3>Siapa di Balik SmartLearn?</h3>
+        <p class="small">Tim kecil praktisi UMKM & teknologi yang paham realita lapangan, bukan teori.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KONTAK ===================== -->
+<section id="kontak">
+  <div class="card">
+    <div class="section-title">
+      <h2><i class="fas fa-envelope-open-text"></i> Kontak & Mulai Gratis</h2>
+    </div>
+
+    <p class="small" style="margin-bottom:14px">
+      Jika kamu ingin mencoba SmartLearn atau butuh bantuan, isi form ini atau hubungi lewat WhatsApp.
+    </p>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px">
+
+      <!-- FORM KONTAK -->
+      <form style="flex:1;min-width:280px" onsubmit="event.preventDefault(); alert('Terima kasih! Kami akan menghubungi Anda.');">
+        <div class="form-row">
+          <input type="text" placeholder="Nama lengkap" required>
+          <input type="text" placeholder="Nama usaha / UMKM" required>
+          <input type="email" placeholder="Email aktif" class="full" required>
+          <textarea placeholder="Pesan atau kebutuhan Anda" rows="4" class="full" required></textarea>
+        </div>
+        <button style="margin-top:10px;width:100%">Kirim</button>
+      </form>
+
+      <!-- BOX WHATSAPP -->
+      <div class="feature" style="flex:1;min-width:260px;display:flex;flex-direction:column;justify-content:center;text-align:center">
+        <i class="fab fa-whatsapp" style="font-size:48px;color:#25D366;margin-bottom:10px"></i>
+        <h3>Chat Langsung via WhatsApp</h3>
+        <p class="small" style="margin:10px 0 20px">Respon cepat untuk demo & pertanyaan.</p>
+        <a
+          href="https://whatsapp.com/channel/0029VbBx6bzIt5rvKl5J0v2a"
+          target="_blank"
+          style="background:var(--gradient);color:white;padding:14px 22px;border-radius:50px;text-decoration:none;font-weight:600;box-shadow:var(--shadow)">
+          Chat Sekarang
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 SmartLearn — Solusi Keuangan UMKM Modern</p>
+</footer>
+
+
+<script src="/js/script.js"></script>
+</body>
+</html>
