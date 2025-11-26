@@ -646,128 +646,106 @@ button:hover {
 }
 
 /* =========================================
-   Responsive
+   RESPONSIVE FIX — MOBILE & TABLET
 ========================================= */
+
+/* === Tablet (≤ 980px) === */
 @media (max-width:980px) {
   .features-grid {
     grid-template-columns: repeat(2,1fr);
   }
+
   .testi-grid {
     grid-template-columns: repeat(2,1fr);
   }
+
   .hero h1 {
     font-size: 32px;
   }
 }
 
-@media (max-width:640px) {
-  .nav { display: none; }
-  .hamburger { display: flex; }
-
-  .features-grid { grid-template-columns: 1fr; }
-  .testi-grid { grid-template-columns: 1fr; }
-
-  .form-row { grid-template-columns: 1fr; }
-  .dashboard { grid-template-columns: 1fr; }
-
-  .calc-input { flex-direction: column; }
-}
-
-/* ===== MATERI PEMBELAJARAN GRID FIX ===== */
-
-
-
-.materi-container {
-  margin-top: 30px;
-}
-
-.materi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
-  margin-top: 25px;
-}
-
-.materi-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 0;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.materi-thumb {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.materi-thumb-container {
-  position: relative;
-}
-
-.materi-play-btn {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(0,0,0,0.55);
-  color: white;
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.materi-text {
-  padding: 14px 8px 20px;
-}
-
-.materi-text h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.materi-text p {
-  font-size: 14px;
-  color: #444;
-}
-
-/* ====== RESPONSIVE (LAYAR HP) ====== */
-@media (max-width: 768px) {
+/* === Mobile (≤ 768px) — FIXED NAVIGATION === */
+@media (max-width:768px) {
 
   .container {
     padding: 0 15px;
   }
 
-  /* NAV MENJADI VERTICAL + HIDDEN */
+  /* ===== NAV HIDDEN DEFAULT ===== */
   .nav {
     display: none;
     flex-direction: column;
     background: #fff;
     position: absolute;
-    top: 60px;
+    top: 65px;
     right: 20px;
-    width: 200px;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 220px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    z-index: 2000;
+  }
+
+  /* ===== NAV MUNCUL SAAT HAMBURGER ACTIVE ===== */
+  .nav.active {
+    display: flex !important;
   }
 
   .nav a {
-    padding: 10px;
+    padding: 12px 0;
     display: block;
+    font-size: 15px;
   }
 
-  /* HAMBURGER MUNCUL */
+  /* HAMBURGER ALWAYS SHOW */
   .hamburger {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    display: flex !important;
   }
 
-  /* HEADER ACTIONS PINDAH */
+  /* HEADER ACTIONS DISEMBUNYIKAN DI HP */
   .header-actions {
     display: none;
+  }
+
+  /* GRID UTAMA MENJADI 1 KOLOM */
+  .features-grid,
+  .testi-grid,
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  /* MATERI */
+  .materi-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .materi-thumb {
+    height: 150px;
+  }
+
+  /* FORM */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator {
+    padding: 15px;
+  }
+}
+
+/* === Extra Small (≤ 640px) — FIX KONFLIK === */
+@media (max-width:640px) {
+  .hero {
+    padding: 100px 0 60px;
+  }
+
+  .hero h1 {
+    font-size: 26px;
+  }
+
+  .cta {
+    padding: 12px 22px;
+    font-size: 14px;
   }
 }
