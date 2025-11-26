@@ -228,3 +228,9 @@ clearTransactionsBtn.addEventListener('click', (e) => {
   });
 
 })();
+const burger = document.getElementById("hamburger");
+const nav = document.getElementById("nav");
+
+burger.onclick = () => {
+  nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+};
