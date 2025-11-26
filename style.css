@@ -732,3 +732,42 @@ button:hover {
   font-size: 14px;
   color: #444;
 }
+
+/* ====== RESPONSIVE (LAYAR HP) ====== */
+@media (max-width: 768px) {
+
+  .container {
+    padding: 0 15px;
+  }
+
+  /* NAV MENJADI VERTICAL + HIDDEN */
+  .nav {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 200px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .nav a {
+    padding: 10px;
+    display: block;
+  }
+
+  /* HAMBURGER MUNCUL */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  /* HEADER ACTIONS PINDAH */
+  .header-actions {
+    display: none;
+  }
+}
